@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:happy_dog/provider/location_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool status = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -21,11 +24,62 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text('산책'),
-        //   backgroundColor: Color.fromARGB(255, 13, 128, 23),
-        // ),
-        body: googleMapUI());
+      // appBar: AppBar(
+      //   title: Text('산책'),
+      //   backgroundColor: Color.fromARGB(255, 13, 128, 23),
+      // ),
+      body: Container(
+        height: MediaQuery.of(context).size.height - 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: googleMapUI()),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 80,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '산책 시간 : 00시00분',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '산책중',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        FlutterSwitch(
+                            activeColor: Colors.orangeAccent,
+                            value: status,
+                            onToggle: (val) {
+                              setState(() {
+                                status = val;
+                              });
+                              if (status) {
+                              } else {}
+                            }),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget googleMapUI() {
