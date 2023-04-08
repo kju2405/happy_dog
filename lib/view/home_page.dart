@@ -21,10 +21,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('산책'),
-          backgroundColor: Color.fromARGB(255, 13, 128, 23),
-        ),
+        // appBar: AppBar(
+        //   title: Text('산책'),
+        //   backgroundColor: Color.fromARGB(255, 13, 128, 23),
+        // ),
         body: googleMapUI());
   }
 

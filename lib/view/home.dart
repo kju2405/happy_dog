@@ -4,6 +4,7 @@ import 'package:happy_dog/view/home_page.dart';
 import 'package:happy_dog/view/setting_page.dart';
 import 'package:happy_dog/view/walk_page.dart';
 import 'package:happy_dog/view/walking_recommend_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,6 +14,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   int _currentIndex = 0;
 
   Widget? currentPage;
@@ -22,6 +38,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     currentPage = HomePage();
+    getCurrentUser();
   }
 
   void SelectPage(index) {
@@ -51,6 +68,23 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Happy Dog'),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _authentication.signOut();
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.exit_to_app_sharp,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         showElevation: true,

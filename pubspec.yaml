@@ -39,6 +39,11 @@ dependencies:
   google_maps_flutter: ^2.2.5
   location: ^4.4.0
   provider:
+  cloud_firestore: ^4.5.0
+  firebase_storage: ^11.1.0
+  modal_progress_hud_nsn: ^0.3.0
+  firebase_core: ^2.9.0 #firebase.initializeApp()을 호출해야함.
+  firebase_auth: ^4.4.0
 
 dev_dependencies:
   flutter_test:

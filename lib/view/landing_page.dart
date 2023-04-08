@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:happy_dog/view/home.dart';
+import 'package:happy_dog/view/login_screen.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -62,7 +64,8 @@ class _LandingState extends State<Landing> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => const Home()),
+                      MaterialPageRoute(
+                          builder: (_) => const LoginSignupScreen()),
                       (route) => false);
                 },
                 style: ElevatedButton.styleFrom(
