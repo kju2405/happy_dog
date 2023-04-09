@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_dog/view/recommend_looking_page.dart';
 
 class RecommendPage extends StatefulWidget {
   const RecommendPage({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _RecommendPageState extends State<RecommendPage> {
       body: Column(
         children: [
           SizedBox(
-            height: 20,
+            height: 40,
           ),
           Text(
             '오늘은 어디로 산책을 가볼까?',
@@ -29,7 +30,7 @@ class _RecommendPageState extends State<RecommendPage> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 100,
           ),
           Text(
             '- 산책 시간 -',
@@ -247,7 +248,16 @@ class _RecommendPageState extends State<RecommendPage> {
             height: 50,
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return LookingRecommend();
+                  },
+                ),
+              );
+            },
             icon: Icon(Icons.recommend),
             label: Text('추천 경로 보기'),
           )
