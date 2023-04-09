@@ -45,6 +45,8 @@ dependencies:
   firebase_core: ^2.9.0 #firebase.initializeApp()을 호출해야함.
   firebase_auth: ^4.4.0
   flutter_switch: ^0.3.2
+  image_picker: ^0.8.7+1
+
 
 dev_dependencies:
   flutter_test:
