@@ -14,7 +14,7 @@ class _LookingRecommendState extends State<LookingRecommend> {
       backgroundColor: Colors.green,
       appBar: AppBar(
         title: Text('오늘 이렇게 산책하는건 어때요?'),
-        backgroundColor: Colors.greenre,
+        backgroundColor: Colors.green,
       ),
       body: Center(
         child: Column(
