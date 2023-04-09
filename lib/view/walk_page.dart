@@ -91,7 +91,7 @@ class _WalkingPageState extends State<WalkingPage> {
                           '- 뛰어다닐 수 있어요 (9)',
                           style: TextStyle(fontSize: 14),
                         ),
-                      ],
+                      ], // 추천 버튼과 이 경로로 산책하기 버튼 추가할것.
                     ),
                   ),
                 );
