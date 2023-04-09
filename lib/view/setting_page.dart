@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:happy_dog/add_image/add_image.dart';
 import 'package:happy_dog/config/palette.dart';
+import 'package:happy_dog/view/walking_record.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
@@ -191,6 +192,53 @@ class _SettingPageState extends State<SettingPage> {
                 )
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              '- 나의 발자취 -',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return WalkingRecord();
+                    },
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.grass,
+                color: Colors.green,
+              ),
+              label: Text(
+                '산책 기록',
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ),
+              label: Text(
+                '함께한 친구들',
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.red,
+                ),
+              ),
+            )
           ],
         ),
       ),
