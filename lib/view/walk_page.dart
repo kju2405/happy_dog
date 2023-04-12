@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:happy_dog/controller/route_controller.dart';
+import 'package:happy_dog/view/home.dart';
+import 'package:happy_dog/view/home_page.dart';
+import 'package:get/get.dart';
 
 class WalkingPage extends StatefulWidget {
   const WalkingPage({Key? key}) : super(key: key);
@@ -8,6 +12,7 @@ class WalkingPage extends StatefulWidget {
 }
 
 class _WalkingPageState extends State<WalkingPage> {
+  final RouteController routeController = Get.put(RouteController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,6 +96,36 @@ class _WalkingPageState extends State<WalkingPage> {
                           '- 뛰어다닐 수 있어요 (9)',
                           style: TextStyle(fontSize: 14),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (_) => const Home()),
+                                    (route) => false);
+                              },
+                              icon: Icon(Icons.directions_walk),
+                              label: Text('발자국 따라가기'),
+                            ),
+                            GetX<RouteController>(
+                              builder: (_) => TextButton.icon(
+                                onPressed: () {
+                                  routeController.updateInfo();
+                                },
+                                icon: Icon(Icons.thumb_up_alt_outlined),
+                                label: Text(
+                                  '${routeController.routeThumb().num}',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ], // 추천 버튼과 이 경로로 산책하기 버튼 추가할것.
                     ),
                   ),
