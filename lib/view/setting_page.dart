@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:happy_dog/add_image/add_image.dart';
 import 'package:happy_dog/config/palette.dart';
 import 'package:happy_dog/view/edit_dog.dart';
+import 'package:happy_dog/view/edit_person.dart';
 import 'package:happy_dog/view/walking_mate.dart';
 import 'package:happy_dog/view/walking_record.dart';
 import 'package:image_picker/image_picker.dart';
@@ -196,7 +197,10 @@ class _SettingPageState extends State<SettingPage> {
                             style: TextStyle(fontSize: 20),
                           ),
                           ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditPersonProfile()));
+                            },
                             icon: Icon(Icons.edit),
                             label: Text('프로필 수정'),
                           ),
