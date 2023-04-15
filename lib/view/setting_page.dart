@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:happy_dog/add_image/add_image.dart';
+import 'package:happy_dog/popup_windows/add_image.dart';
 import 'package:happy_dog/config/palette.dart';
 import 'package:happy_dog/view/edit_dog.dart';
 import 'package:happy_dog/view/edit_person.dart';

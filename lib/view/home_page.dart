@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:happy_dog/popup_windows/walk_finish_popup.dart';
 import 'package:happy_dog/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: WalkFinished(),
+        );
+      },
+    );
+  }
+
   bool status = false;
 
   @override
@@ -67,8 +80,12 @@ class _HomePageState extends State<HomePage> {
                               setState(() {
                                 status = val;
                               });
-                              if (status) {
-                              } else {}
+                              if (status == false) {
+                                print('산책 종료');
+                                showAlert(context);
+                              } else {
+                                print('산책 시작');
+                              }
                             }),
                       ],
                     )
