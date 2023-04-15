@@ -96,7 +96,12 @@ class _SettingPageState extends State<SettingPage> {
                           Text(
                             '사람을 좋아해요, 입질이 있어요, 강아지들과 잘 놀아요',
                             style: TextStyle(fontSize: 20),
-                          )
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.edit),
+                            label: Text('프로필 수정'),
+                          ),
                         ],
                       ),
                     ),
@@ -185,7 +190,12 @@ class _SettingPageState extends State<SettingPage> {
                           Text(
                             '강아지에대해 궁금한점 : 배변교육이 잘 안돼요',
                             style: TextStyle(fontSize: 20),
-                          )
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.edit),
+                            label: Text('프로필 수정'),
+                          ),
                         ],
                       ),
                     ),
