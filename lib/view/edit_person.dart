@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class EditPersonProfile extends StatefulWidget {
   const EditPersonProfile({Key? key}) : super(key: key);
@@ -14,6 +15,11 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
   List personJobList = ['학생', '직장인', '주부', '어르신'];
   var personSex;
   var personJob;
+  bool status_name = true;
+  bool status_age = true;
+  bool status_sex = true;
+  bool status_time = true;
+  bool status_job = true;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +60,41 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "보호자 이름",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "보호자 이름",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '공개여부',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          FlutterSwitch(
+                              width: 50,
+                              height: 25,
+                              toggleSize: 18,
+                              activeColor: Colors.orangeAccent,
+                              value: status_name,
+                              onToggle: (val) {
+                                setState(() {
+                                  status_name = val;
+                                });
+                                if (status_name) {
+                                } else {}
+                              }),
+                        ],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 5,
@@ -81,10 +118,42 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "보호자 나이",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "보호자 나이",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '공개여부',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              FlutterSwitch(
+                                  width: 50,
+                                  height: 25,
+                                  toggleSize: 18,
+                                  activeColor: Colors.orangeAccent,
+                                  value: status_age,
+                                  onToggle: (val) {
+                                    setState(() {
+                                      status_age = val;
+                                    });
+                                    if (status_age) {
+                                    } else {}
+                                  }),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 5,
@@ -106,10 +175,42 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "보호자 성별",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "보호자 성별",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '공개여부',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              FlutterSwitch(
+                                  width: 50,
+                                  height: 25,
+                                  toggleSize: 18,
+                                  activeColor: Colors.orangeAccent,
+                                  value: status_sex,
+                                  onToggle: (val) {
+                                    setState(() {
+                                      status_sex = val;
+                                    });
+                                    if (status_sex) {
+                                    } else {}
+                                  }),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 5,
@@ -157,10 +258,42 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "산책 시간대",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "산책 시간대",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '공개여부',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              FlutterSwitch(
+                                  width: 50,
+                                  height: 25,
+                                  toggleSize: 18,
+                                  activeColor: Colors.orangeAccent,
+                                  value: status_time,
+                                  onToggle: (val) {
+                                    setState(() {
+                                      status_time = val;
+                                    });
+                                    if (status_time) {
+                                    } else {}
+                                  }),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 5,
@@ -182,10 +315,42 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "보호자 직업",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "보호자 직업",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '공개여부',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              FlutterSwitch(
+                                  width: 50,
+                                  height: 25,
+                                  toggleSize: 18,
+                                  activeColor: Colors.orangeAccent,
+                                  value: status_job,
+                                  onToggle: (val) {
+                                    setState(() {
+                                      status_job = val;
+                                    });
+                                    if (status_job) {
+                                    } else {}
+                                  }),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 5,
