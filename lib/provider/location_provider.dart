@@ -5,7 +5,10 @@ import 'package:location/location.dart';
 class LocationProvider with ChangeNotifier {
   late Location _location;
   Location get location => _location;
-  late LatLng _locationPosition;
+  late LocationData _locationData;
+
+  late LatLng _locationPosition =
+      new LatLng(37.2887016141017, 127.061237557645);
   LatLng get locationPosition => _locationPosition;
 
   bool locationServiceActive = true;
