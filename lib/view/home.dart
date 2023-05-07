@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('개인정보'),
             activeColor: Color.fromARGB(255, 18, 33, 132),
             textAlign: TextAlign.center,
           ),
