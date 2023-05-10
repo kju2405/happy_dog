@@ -1,6 +1,7 @@
 package happy_dog.happy_dog.repository;
 
 import happy_dog.happy_dog.domain.Member;
+import happy_dog.happy_dog.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
 
@@ -10,11 +11,11 @@ import java.util.NoSuchElementException;
 
 
 @Slf4j
-public class MemberRepositoryV1 {
+public class UserRepository {
 
     private final DataSource dataSource;
 
-    public MemberRepositoryV1(DataSource dataSource) {
+    public UserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -60,8 +61,8 @@ public class MemberRepositoryV1 {
         }
     }
 
-    public Member save(Member member) throws SQLException {
-        String sql = "insert into member(member_id,money) values (?, ?)";
+    public User save(User user) throws SQLException {
+        String sql = "insert into users(userid,email,password) values (?, ?, ?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -70,10 +71,11 @@ public class MemberRepositoryV1 {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, member.getMemberId());
-            pstmt.setInt(2, member.getMoney());
+            pstmt.setString(1, user.getUserId());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getPassword());
             pstmt.executeUpdate();
-            return member;
+            return user;
         } catch (SQLException e) {
             log.error("db error",e);
             throw e;

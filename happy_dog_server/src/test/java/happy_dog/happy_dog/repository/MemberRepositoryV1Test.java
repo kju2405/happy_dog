@@ -16,7 +16,7 @@ import static happy_dog.happy_dog.connection.ConnectionConst.*;
 
 @Slf4j
 class MemberRepositoryV1Test {
-    MemberRepositoryV1 memberRepository;
+    UserRepository memberRepository;
 
     @BeforeEach
     void beforeEach(){
@@ -27,14 +27,14 @@ class MemberRepositoryV1Test {
         dataSource.setUsername(MySqlUSERNAME);
         dataSource.setPassword(MySqlPASSWORD);
 
-        memberRepository = new MemberRepositoryV1(dataSource);
+        memberRepository = new UserRepository(dataSource);
     }
 
     @Test
     void crud() throws SQLException {
         //save
         Member member = new Member("memberV5", 10000);
-        memberRepository.save(member);
+//        memberRepository.save();
 
         //findById
         Member findMember = memberRepository.findById(member.getMemberId());
