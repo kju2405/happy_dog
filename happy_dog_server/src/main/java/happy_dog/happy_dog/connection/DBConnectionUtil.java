@@ -1,5 +1,7 @@
 package happy_dog.happy_dog.connection;
 
+import com.zaxxer.hikari.HikariDataSource;
+import happy_dog.happy_dog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -10,13 +12,13 @@ import static happy_dog.happy_dog.connection.ConnectionConst.*;
 
 @Slf4j
 public class DBConnectionUtil {
-    public static Connection getConnetion(){
-        try {
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            log.info("get connection={}, class={}", connection, connection.getClass());
-            return connection;
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
+    public static UserRepository getConnetion(){
+
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(MySqlURL);
+        dataSource.setUsername(MySqlUSERNAME);
+        dataSource.setPassword(MySqlPASSWORD);
+        UserRepository userRepository = new UserRepository(dataSource);
+        return userRepository;
     }
 }

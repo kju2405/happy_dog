@@ -2,6 +2,7 @@ package happy_dog.happy_dog.basic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
+import happy_dog.happy_dog.connection.DBConnectionUtil;
 import happy_dog.happy_dog.domain.User;
 import happy_dog.happy_dog.repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -25,11 +26,7 @@ public class JoinServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(MySqlURL);
-        dataSource.setUsername(MySqlUSERNAME);
-        dataSource.setPassword(MySqlPASSWORD);
-        UserRepository userRepository = new UserRepository(dataSource);
+        UserRepository userRepository = DBConnectionUtil.getConnetion();
 
         ServletInputStream inputStream = request.getInputStream();
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
