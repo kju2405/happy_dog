@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditPersonProfile extends StatefulWidget {
   const EditPersonProfile({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class EditPersonProfile extends StatefulWidget {
 class _EditPersonProfileState extends State<EditPersonProfile> {
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+  String ipAddress = IpAddress.ipAddress;
   String? userEmail;
   String? selected_sex = "보호자의 성별을 선택해주세요.";
   String? selected_job = "보호자 직업을 선택해주세요.";
@@ -29,6 +33,13 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
   bool status_sex = true;
   bool status_time = true;
   bool status_job = true;
+  TextEditingController nameController =
+      TextEditingController(); //TextField에서 입력된 값을 가져올때 사용함.
+  TextEditingController ageController = TextEditingController();
+  TextEditingController durationWalkingController = TextEditingController();
+  TextEditingController walkTimeController = TextEditingController();
+  TextEditingController adviceController = TextEditingController();
+  TextEditingController questionDogController = TextEditingController();
 
   void getCurrentUser() {
     try {
@@ -39,6 +50,31 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  updateUserInfo() async {
+    var url = 'http://$ipAddress/users/update';
+    var body = {
+      "email": userEmail,
+      "name": nameController.text.toString(),
+      "sex": selected_sex,
+      "age": ageController.text.toString(),
+      "durationWalking": durationWalkingController.text.toString(),
+      "walkTime": walkTimeController.text.toString(),
+      "job": selected_job,
+      "advice": adviceController.text.toString(),
+      "questionDog": questionDogController.text.toString()
+    };
+
+    var data = await http.post(Uri.parse(url),
+        body: json.encode(body),
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    if (data.statusCode == 200) {
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
@@ -128,7 +164,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                     height: 5,
                   ),
                   TextField(
-                    // controller: _name,
+                    controller: nameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -187,7 +223,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         height: 5,
                       ),
                       TextField(
-                        // controller: temp,
+                        controller: ageController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -273,12 +309,70 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                                   () {
                                     personSex = value;
                                     selected_sex = personSex;
+                                    print(selected_sex);
                                   },
                                 );
                               },
                             ),
                           ),
                         ),
+                      ),
+                    ])),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "산책 소요시간",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '공개여부',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              FlutterSwitch(
+                                  width: 50,
+                                  height: 25,
+                                  toggleSize: 18,
+                                  activeColor: Colors.orangeAccent,
+                                  value: status_time,
+                                  onToggle: (val) {
+                                    setState(() {
+                                      status_time = val;
+                                    });
+                                    if (status_time) {
+                                    } else {}
+                                  }),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      TextField(
+                        controller: durationWalkingController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            filled: true,
+                            hintStyle: TextStyle(color: Colors.grey[800]),
+                            hintText: durationWalking,
+                            fillColor: Colors.white),
                       ),
                     ])),
             Padding(
@@ -327,7 +421,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         height: 5,
                       ),
                       TextField(
-                        // controller: moisture,
+                        controller: walkTimeController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -435,7 +529,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         height: 5,
                       ),
                       TextField(
-                        // controller: moisture,
+                        controller: adviceController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -460,7 +554,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                     height: 5,
                   ),
                   TextField(
-                    // controller: moisture,
+                    controller: questionDogController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -483,7 +577,10 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                       height: MediaQuery.of(context).size.height * 0.06,
                       child: ElevatedButton(
                         child: Text("프로필 변경사항 저장하기"),
-                        onPressed: () {},
+                        onPressed: () {
+                          updateUserInfo();
+                          Navigator.pop(context);
+                        },
                       ),
                     ),
                   ),
