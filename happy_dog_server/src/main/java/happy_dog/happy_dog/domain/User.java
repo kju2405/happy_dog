@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Data @Getter @Setter
 public class User {
-    private String userId;
     private String email;
     private String password;
     private String name;
@@ -21,9 +20,9 @@ public class User {
     public User() {
     }
 
-    public User(String userId, String email, String password) {
-        this.userId = userId;
+    public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
+        this.name = name;
     }
 }

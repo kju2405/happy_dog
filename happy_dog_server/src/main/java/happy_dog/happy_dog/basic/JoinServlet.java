@@ -33,15 +33,18 @@ public class JoinServlet extends HttpServlet {
         User user = objectMapper.readValue(messageBody, User.class);
         String email = user.getEmail();
         String password = user.getPassword();
+        String name = user.getName();
         System.out.println("email = " + email);
         System.out.println("password = " + password);
+        System.out.println("name = " + name);
 
         try {
             userRepository.save(user);
             response.setContentType("text/plain");
             response.setCharacterEncoding("utf-8");
             response.getWriter().write("email = " + email+"\n");
-            response.getWriter().write("password = " + password);
+            response.getWriter().write("password = " + password+"\n");
+            response.getWriter().write("name = "+name+"\n");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
