@@ -27,7 +27,7 @@ public class UpdateUserServlet extends HttpServlet {
         ServletInputStream inputStream = request.getInputStream();
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
         User user = objectMapper.readValue(messageBody, User.class);
-        String userId = user.getUserId();
+        String email = user.getEmail();
         String name = user.getName();
         String sex = user.getSex();
         String age = user.getAge();
@@ -37,7 +37,7 @@ public class UpdateUserServlet extends HttpServlet {
         String advice = user.getAdvice();
         String questionDog = user.getQuestionDog();
         try {
-            userRepository.update(userId, name, sex, age, durationWalking, walkTime, job, advice, questionDog);
+            userRepository.update(email, name, sex, age, durationWalking, walkTime, job, advice, questionDog);
             response.setContentType("text/plain");
             response.setCharacterEncoding("utf-8");
         } catch (SQLException e) {

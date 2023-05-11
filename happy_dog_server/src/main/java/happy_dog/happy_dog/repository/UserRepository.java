@@ -19,8 +19,8 @@ public class UserRepository {
         this.dataSource = dataSource;
     }
 
-    public void update(String userId, String name,String sex,String age,String durationWalking,String walkTime,String job, String advice, String questionDog) throws SQLException {
-        String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where userid=?";
+    public void update(String email, String name,String sex,String age,String durationWalking,String walkTime,String job, String advice, String questionDog) throws SQLException {
+        String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where email=?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -37,7 +37,7 @@ public class UserRepository {
             pstmt.setString(6, job);
             pstmt.setString(7, advice);
             pstmt.setString(8, questionDog);
-            pstmt.setString(9, userId);
+            pstmt.setString(9, email);
             int resultSize = pstmt.executeUpdate();
             log.info("resultSize={}", resultSize);
         } catch (SQLException e) {
@@ -69,7 +69,7 @@ public class UserRepository {
     }
 
     public User save(User user) throws SQLException {
-        String sql = "insert into users(userid,email,password) values (?, ?, ?)";
+        String sql = "insert into users(email,password,name) values (?, ?, ?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -78,9 +78,9 @@ public class UserRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, user.getUserId());
-            pstmt.setString(2, user.getEmail());
-            pstmt.setString(3, user.getPassword());
+            pstmt.setString(1, user.getEmail());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getName());
             pstmt.executeUpdate();
             return user;
         } catch (SQLException e) {

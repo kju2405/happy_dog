@@ -31,10 +31,8 @@ public class JoinServlet extends HttpServlet {
         ServletInputStream inputStream = request.getInputStream();
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
         User user = objectMapper.readValue(messageBody, User.class);
-        String userId = user.getUserId();
         String email = user.getEmail();
         String password = user.getPassword();
-        System.out.println("userId = " + userId);
         System.out.println("email = " + email);
         System.out.println("password = " + password);
 
@@ -42,7 +40,6 @@ public class JoinServlet extends HttpServlet {
             userRepository.save(user);
             response.setContentType("text/plain");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().write("userId = "+userId+"\n");
             response.getWriter().write("email = " + email+"\n");
             response.getWriter().write("password = " + password);
         } catch (SQLException e) {
