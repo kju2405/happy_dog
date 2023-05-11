@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:happy_dog/view/recommend_looking_page.dart';
 
 class RecommendPage extends StatefulWidget {
-  const RecommendPage({Key? key}) : super(key: key);
+  final String? userEmail;
+  const RecommendPage({Key? key, required this.userEmail}) : super(key: key);
 
   @override
   State<RecommendPage> createState() => _RecommendPageState();

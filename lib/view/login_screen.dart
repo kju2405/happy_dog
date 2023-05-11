@@ -4,6 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:happy_dog/view/home.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:happy_dog/config/ipAddress.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _authentication = FirebaseAuth.instance;
-
+  String ipAddress = IpAddress.ipAddress;
   bool isSignupScreen = true;
   bool showSpinner = false;
   final _formKey =
@@ -22,6 +25,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+
+  addUserToDB() async {
+    var url = 'http://$ipAddress/users/join';
+    var body = {
+      "email": userEmail,
+      "password": userPassword,
+      "name": userName,
+    };
+
+    var data = await http.post(Uri.parse(url),
+        body: json.encode(body),
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    if (data.statusCode == 200) {
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   // void showAlert(BuildContext context) {
   //   showDialog(
@@ -512,6 +534,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 'email': userEmail
                               });
                               if (newUser.user != null) {
+                                addUserToDB();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

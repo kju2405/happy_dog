@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+  String? userEmail;
 
   void getCurrentUser() {
     try {
@@ -37,30 +38,32 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentPage = HomePage();
     getCurrentUser();
+    userEmail = loggedUser!.email;
+    currentPage = HomePage(userEmail: userEmail!);
+    print('Home page    $userEmail');
   }
 
   void SelectPage(index) {
     if (index == 0) {
       setState(() {
         _currentIndex = index;
-        currentPage = HomePage();
+        currentPage = HomePage(userEmail: userEmail!);
       });
     } else if (index == 1) {
       setState(() {
         _currentIndex = index;
-        currentPage = WalkingPage();
+        currentPage = WalkingPage(userEmail: userEmail!);
       });
     } else if (index == 2) {
       setState(() {
         _currentIndex = index;
-        currentPage = RecommendPage();
+        currentPage = RecommendPage(userEmail: userEmail!);
       });
     } else if (index == 3) {
       setState(() {
         _currentIndex = index;
-        currentPage = SettingPage();
+        currentPage = SettingPage(userEmail: userEmail!);
       });
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditPersonProfile extends StatefulWidget {
   const EditPersonProfile({Key? key}) : super(key: key);
@@ -9,8 +10,16 @@ class EditPersonProfile extends StatefulWidget {
 }
 
 class _EditPersonProfileState extends State<EditPersonProfile> {
-  String? selected_sex = "";
-  String? selected_job = "";
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+  String? userEmail;
+  String? selected_sex = "보호자의 성별을 선택해주세요.";
+  String? selected_job = "보호자 직업을 선택해주세요.";
+  String? name = "보호자 이름을 작성해주세요.";
+  String? age = "보호자 나이를 작성해주세요.";
+  String? durationWalking = "산책 시간대를 작성해주세요.";
+  String? advice = "조언 가능 분야를 작성해주세요.";
+  String? questionDog = "강아지에 대한 궁금한점을 작성해주세요.";
   List personSexList = ['남자', '여자'];
   List personJobList = ['학생', '직장인', '주부', '어르신'];
   var personSex;
@@ -20,6 +29,25 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
   bool status_sex = true;
   bool status_time = true;
   bool status_job = true;
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    getCurrentUser();
+    userEmail = loggedUser!.email;
+    print('edit_person  -  $userEmail');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +135,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         ),
                         filled: true,
                         hintStyle: TextStyle(color: Colors.grey[800]),
-                        hintText: "보호자 이름을 작성해주세요.",
+                        hintText: name,
                         fillColor: Colors.white),
                   ),
                 ],
@@ -166,7 +194,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: "보호자 나이를 작성해주세요.",
+                            hintText: age,
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -235,7 +263,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                               }).toList(),
                               hint: Container(
                                 child: Text(
-                                  "보호자 성별을 선택해주세요.",
+                                  selected_sex!,
                                   style: TextStyle(color: Colors.grey),
                                   textAlign: TextAlign.end,
                                 ),
@@ -306,7 +334,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: "산책 시간대를 작성해주세요.",
+                            hintText: durationWalking,
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -375,7 +403,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                               }).toList(),
                               hint: Container(
                                 child: Text(
-                                  "보호자 직업을 선택해주세요.",
+                                  selected_job!,
                                   style: TextStyle(color: Colors.grey),
                                   textAlign: TextAlign.end,
                                 ),
@@ -414,7 +442,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: "조언 가능 분야를 작성해주세요.",
+                            hintText: advice,
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -439,7 +467,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         ),
                         filled: true,
                         hintStyle: TextStyle(color: Colors.grey[800]),
-                        hintText: "강아지에 대한 궁금한점을 작성해주세요.",
+                        hintText: questionDog,
                         fillColor: Colors.white),
                   ),
                   SizedBox(

@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => LocationProvider(),
-          child: HomePage(),
+          child: HomePage(
+            userEmail: '',
+          ),
         )
       ],
       child: MaterialApp(

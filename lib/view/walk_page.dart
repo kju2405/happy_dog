@@ -5,7 +5,8 @@ import 'package:happy_dog/view/home_page.dart';
 import 'package:get/get.dart';
 
 class WalkingPage extends StatefulWidget {
-  const WalkingPage({Key? key}) : super(key: key);
+  final String? userEmail;
+  const WalkingPage({Key? key, this.userEmail}) : super(key: key);
 
   @override
   State<WalkingPage> createState() => _WalkingPageState();
@@ -13,6 +14,13 @@ class WalkingPage extends StatefulWidget {
 
 class _WalkingPageState extends State<WalkingPage> {
   final RouteController routeController = Get.put(RouteController());
+  String? userEmail;
+  @override
+  void initState() {
+    userEmail = widget.userEmail;
+    print('Walking page $userEmail');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

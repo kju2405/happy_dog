@@ -6,7 +6,8 @@ import 'package:happy_dog/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String? userEmail;
+  const HomePage({super.key, required this.userEmail});
 
   @override
   State<HomePage> createState() => _HomePageState();

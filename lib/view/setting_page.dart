@@ -10,7 +10,8 @@ import 'package:happy_dog/view/walking_record.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  final String? userEmail;
+  const SettingPage({Key? key, required this.userEmail}) : super(key: key);
 
   @override
   State<SettingPage> createState() => _SettingPageState();
