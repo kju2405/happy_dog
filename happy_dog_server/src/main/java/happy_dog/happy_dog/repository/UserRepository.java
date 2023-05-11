@@ -19,8 +19,8 @@ public class UserRepository {
         this.dataSource = dataSource;
     }
 
-    public void update(String memberId, int money) throws SQLException {
-        String sql = "update member set money=? where member_Id=?";
+    public void update(String userId, String name,String sex,String age,String durationWalking,String walkTime,String job, String advice, String questionDog) throws SQLException {
+        String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where userid=?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -29,8 +29,15 @@ public class UserRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, money);
-            pstmt.setString(2, memberId);
+            pstmt.setString(1, name);
+            pstmt.setString(2, sex);
+            pstmt.setString(3, age);
+            pstmt.setString(4, durationWalking);
+            pstmt.setString(5, walkTime);
+            pstmt.setString(6, job);
+            pstmt.setString(7, advice);
+            pstmt.setString(8, questionDog);
+            pstmt.setString(9, userId);
             int resultSize = pstmt.executeUpdate();
             log.info("resultSize={}", resultSize);
         } catch (SQLException e) {
