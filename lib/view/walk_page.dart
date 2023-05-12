@@ -25,6 +25,30 @@ class _WalkingPageState extends State<WalkingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green,
+      appBar: AppBar(
+        title: Text('Happy Dog'),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              )),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.exit_to_app_sharp,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
       body: Column(
         children: [
           Expanded(

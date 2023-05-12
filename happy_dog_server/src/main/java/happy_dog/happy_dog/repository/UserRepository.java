@@ -91,8 +91,8 @@ public class UserRepository {
         }
     }
 
-    public Member findById(String memberId) throws SQLException {
-        String sql = "select * from member where member_id=?";
+    public User findByEmail(String email) throws SQLException {
+        String sql = "select * from users where email=?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -102,15 +102,23 @@ public class UserRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, memberId);
+            pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                Member member = new Member();
-                member.setMemberId(rs.getString("member_id"));
-                member.setMoney(rs.getInt("money"));
-                return member;
+                User user = new User();
+                user.setEmail(rs.getString("email"));
+                user.setName(rs.getString("name"));
+                user.setSex(rs.getString("sex"));
+                user.setAge(rs.getString("age"));
+                user.setDurationWalking(rs.getString("durationWalking"));
+                user.setWalkTime(rs.getString("walkTime"));
+                user.setJob(rs.getString("job"));
+                user.setAdvice(rs.getString("advice"));
+                user.setQuestionDog(rs.getString("questionDog"));
+
+                return user;
             } else {
-                throw new NoSuchElementException("member not found memberId = " + memberId);
+                throw new NoSuchElementException("user not found email = " + email);
             }
         } catch (SQLException e) {
             log.error("db error",e);

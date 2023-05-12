@@ -71,23 +71,31 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Happy Dog'),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-        actions: [
-          IconButton(
-            onPressed: () {
-              _authentication.signOut();
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.exit_to_app_sharp,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text('Happy Dog'),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.green,
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           setState(() {});
+      //         },
+      //         icon: Icon(
+      //           Icons.refresh,
+      //           color: Colors.white,
+      //         )),
+      //     IconButton(
+      //       onPressed: () {
+      //         _authentication.signOut();
+      //         Navigator.pop(context);
+      //       },
+      //       icon: Icon(
+      //         Icons.exit_to_app_sharp,
+      //         color: Colors.white,
+      //       ),
+      //     )
+      //   ],
+      // ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         showElevation: true,

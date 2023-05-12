@@ -38,10 +38,30 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('산책'),
-      //   backgroundColor: Color.fromARGB(255, 13, 128, 23),
-      // ),
+      appBar: AppBar(
+        title: Text('Happy Dog'),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              )),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.exit_to_app_sharp,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height - 200,
         child: Column(
