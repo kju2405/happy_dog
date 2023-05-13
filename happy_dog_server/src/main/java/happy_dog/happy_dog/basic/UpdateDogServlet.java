@@ -2,7 +2,7 @@ package happy_dog.happy_dog.basic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import happy_dog.happy_dog.connection.DBConnectionUtil;
-import happy_dog.happy_dog.domain.User;
+import happy_dog.happy_dog.domain.Dog;
 import happy_dog.happy_dog.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
-@WebServlet(name = "updateUserServlet",urlPatterns = "/users/update")
+@WebServlet(name = "updateDogServlet",urlPatterns = "/dog/update")
 public class UpdateDogServlet extends HttpServlet {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -26,18 +26,9 @@ public class UpdateDogServlet extends HttpServlet {
         UserRepository userRepository = DBConnectionUtil.getConnetion();
         ServletInputStream inputStream = request.getInputStream();
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-        User user = objectMapper.readValue(messageBody, User.class);
-        String email = user.getEmail();
-        String name = user.getName();
-        String sex = user.getSex();
-        String age = user.getAge();
-        String durationWalking = user.getDurationWalking();
-        String walkTime = user.getWalkTime();
-        String job = user.getJob();
-        String advice = user.getAdvice();
-        String questionDog = user.getQuestionDog();
+        Dog dog = objectMapper.readValue(messageBody, Dog.class);
         try {
-            userRepository.update(email, name, sex, age, durationWalking, walkTime, job, advice, questionDog);
+            userRepository.updateDogInfo(dog);
             response.setContentType("text/plain");
             response.setCharacterEncoding("utf-8");
         } catch (SQLException e) {

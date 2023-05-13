@@ -1,5 +1,6 @@
 package happy_dog.happy_dog.repository;
 
+import happy_dog.happy_dog.domain.Dog;
 import happy_dog.happy_dog.domain.Member;
 import happy_dog.happy_dog.domain.User;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,52 @@ public class UserRepository {
         this.dataSource = dataSource;
     }
 
+    public void saveDogInfo(String useremail) throws SQLException {
+        //dog 테이블에 사용자 이메일 저장
+        String sql="insert into dog(useremail) values(?)";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, useremail);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, null);
+        }
+    }
+
+    public void updateDogInfo(Dog dog) throws SQLException {
+        String sql="update dog set dogname=?, dogage=?,dogsex=?, dogkind=?, dogfeature=? where useremail=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, dog.getDogName());
+            pstmt.setString(2, dog.getDogAge());
+            pstmt.setString(3, dog.getDogSex());
+            pstmt.setString(4, dog.getDogKind());
+            pstmt.setString(5, dog.getDogFeature());
+            pstmt.setString(6, dog.getUserEmail());
+            int resultSize = pstmt.executeUpdate();
+            log.info("resultSize={}", resultSize);
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        }finally {
+            close(con, pstmt, null);
+        }
+    }
     public void update(String email, String name,String sex,String age,String durationWalking,String walkTime,String job, String advice, String questionDog) throws SQLException {
         String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where email=?";
 

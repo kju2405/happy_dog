@@ -40,6 +40,7 @@ public class JoinServlet extends HttpServlet {
 
         try {
             userRepository.save(user);
+            userRepository.saveDogInfo(email);
             response.setContentType("text/plain");
             response.setCharacterEncoding("utf-8");
             response.getWriter().write("email = " + email+"\n");
