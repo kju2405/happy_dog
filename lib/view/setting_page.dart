@@ -26,14 +26,19 @@ class _SettingPageState extends State<SettingPage> {
   User? loggedUser;
   String ipAddress = IpAddress.ipAddress;
   String? userEmail;
-  String? personName;
-  String? personAge;
-  String? personSex;
-  String? personDurationWalking;
-  String? personWalkTime;
-  String? personJob;
-  String? personAdvice;
-  String? personQuestionDog;
+  String? personName = '';
+  String? personAge = '';
+  String? personSex = '';
+  String? personDurationWalking = '';
+  String? personWalkTime = '';
+  String? personJob = '';
+  String? personAdvice = '';
+  String? personQuestionDog = '';
+  String? dogName = '';
+  String? dogAge = '';
+  String? dogSex = '';
+  String? dogKind = '';
+  String? dogFeature = '';
   void showAlert(BuildContext context) {
     showDialog(
       context: context,
@@ -85,6 +90,22 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  void getDogInfo() async {
+    http.Response response = await http
+        .get(Uri.parse('http://$ipAddress/dog/info?email=$userEmail'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      dogName = parsingData['dogName'];
+      dogAge = parsingData['dogAge'];
+      dogSex = parsingData['dogSex'];
+      dogKind = parsingData['dogKind'];
+      dogFeature = parsingData['dogFeature'];
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +116,7 @@ class _SettingPageState extends State<SettingPage> {
         actions: [
           IconButton(
               onPressed: () {
+                getDogInfo();
                 getUserInfo();
                 setState(() {});
               },
@@ -146,14 +168,14 @@ class _SettingPageState extends State<SettingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '이름 : 땅콩',
+                            '이름 : $dogName',
                             style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(
                             height: 7,
                           ),
                           Text(
-                            '나이 : 10개월',
+                            '나이 : $dogAge',
                             style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(
@@ -167,7 +189,7 @@ class _SettingPageState extends State<SettingPage> {
                             height: 7,
                           ),
                           Text(
-                            '품종 : 말티푸',
+                            '품종 : $dogKind',
                             style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(
@@ -178,7 +200,7 @@ class _SettingPageState extends State<SettingPage> {
                             style: TextStyle(fontSize: 20),
                           ),
                           Text(
-                            '사람을 좋아해요, 입질이 있어요, 강아지들과 잘 놀아요',
+                            '$dogFeature',
                             style: TextStyle(fontSize: 20),
                           ),
                           ElevatedButton.icon(

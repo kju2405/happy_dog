@@ -175,6 +175,40 @@ public class UserRepository {
             close(con, pstmt, rs);
         }
     }
+
+    public Dog findDogByEmail(String email) throws SQLException {
+        String sql = "select * from dog where useremail=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Dog dog = new Dog();
+                dog.setUserEmail(rs.getString("useremail"));
+                dog.setDogName(rs.getString("dogname"));
+                dog.setDogAge(rs.getString("dogage"));
+                dog.setDogSex(rs.getString("dogsex"));
+                dog.setDogKind(rs.getString("dogkind"));
+                dog.setDogFeature(rs.getString("dogfeature"));
+
+                return dog;
+            } else {
+                throw new NoSuchElementException("user not found email = " + email);
+            }
+        } catch (SQLException e) {
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
         JdbcUtils.closeStatement(stmt);
