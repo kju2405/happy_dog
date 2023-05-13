@@ -182,7 +182,7 @@ class _SettingPageState extends State<SettingPage> {
                             height: 7,
                           ),
                           Text(
-                            '성별 : 남',
+                            '성별 : $dogSex',
                             style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(

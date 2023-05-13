@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditDogProfile extends StatefulWidget {
   const EditDogProfile({Key? key}) : super(key: key);
@@ -8,9 +12,60 @@ class EditDogProfile extends StatefulWidget {
 }
 
 class _EditDogProfileState extends State<EditDogProfile> {
-  String? selected_sex = "";
+  String? selected_sex = "강아지 성별을 선택해주세요.";
   List dogSex = ['남자', '여자'];
   var sex;
+  String ipAddress = IpAddress.ipAddress;
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+  String? userEmail;
+  String? dogName = '';
+  String? dogAge = '';
+
+  String? dogKind = '';
+  String? dogFeature = '';
+  TextEditingController dogNameController = TextEditingController();
+  TextEditingController dogAgeController = TextEditingController();
+  TextEditingController dogKindController = TextEditingController();
+  TextEditingController dogFeatureController = TextEditingController();
+
+  void getDogInfo() async {
+    http.Response response = await http
+        .get(Uri.parse('http://$ipAddress/dog/info?email=$userEmail'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      dogName = parsingData['dogName'];
+      dogAge = parsingData['dogAge'];
+      selected_sex = parsingData['dogSex'];
+      dogKind = parsingData['dogKind'];
+      dogFeature = parsingData['dogFeature'];
+      dogNameController = TextEditingController(text: dogName);
+      dogAgeController = TextEditingController(text: dogAge);
+      dogKindController = TextEditingController(text: dogKind);
+      dogFeatureController = TextEditingController(text: dogFeature);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    getCurrentUser();
+    userEmail = loggedUser!.email;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +83,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
         actions: [
           IconButton(
               onPressed: () {
+                getDogInfo();
                 setState(() {});
               },
               icon: Icon(
@@ -60,7 +116,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
                     height: 5,
                   ),
                   TextField(
-                    // controller: _name,
+                    controller: dogNameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -87,7 +143,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
                         height: 5,
                       ),
                       TextField(
-                        // controller: temp,
+                        controller: dogAgeController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -131,7 +187,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
                               }).toList(),
                               hint: Container(
                                 child: Text(
-                                  "강아지 성별을 선택해주세요.",
+                                  selected_sex!,
                                   style: TextStyle(color: Colors.grey),
                                   textAlign: TextAlign.end,
                                 ),
@@ -161,7 +217,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
                         height: 5,
                       ),
                       TextField(
-                        // controller: moisture,
+                        controller: dogKindController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -186,7 +242,7 @@ class _EditDogProfileState extends State<EditDogProfile> {
                     height: 5,
                   ),
                   TextField(
-                    // controller: moisture,
+                    controller: dogFeatureController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
