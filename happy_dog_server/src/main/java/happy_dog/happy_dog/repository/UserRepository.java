@@ -107,6 +107,7 @@ public class UserRepository {
             if (rs.next()) {
                 User user = new User();
                 user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
                 user.setName(rs.getString("name"));
                 user.setSex(rs.getString("sex"));
                 user.setAge(rs.getString("age"));

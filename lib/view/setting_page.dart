@@ -63,7 +63,6 @@ class _SettingPageState extends State<SettingPage> {
     getCurrentUser();
     userEmail = loggedUser!.email;
     print('edit_person  -  $userEmail');
-    getUserInfo();
   }
 
   void getUserInfo() async {
@@ -88,7 +87,6 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    getUserInfo();
     return Scaffold(
       appBar: AppBar(
         title: Text('Happy Dog'),

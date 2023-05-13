@@ -17,13 +17,14 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
   User? loggedUser;
   String ipAddress = IpAddress.ipAddress;
   String? userEmail;
-  String? selected_sex = "보호자의 성별을 선택해주세요.";
-  String? selected_job = "보호자 직업을 선택해주세요.";
-  String? name = "보호자 이름을 작성해주세요.";
-  String? age = "보호자 나이를 작성해주세요.";
-  String? durationWalking = "산책 시간대를 작성해주세요.";
-  String? advice = "조언 가능 분야를 작성해주세요.";
-  String? questionDog = "강아지에 대한 궁금한점을 작성해주세요.";
+  String? selected_sex = '보호자의 성별을 선택해주세요.';
+  String? selected_job = '보호자의 직업을 선택해주세요.';
+  String? name;
+  String? age;
+  String? durationWalking;
+  String? walkTime;
+  String? advice;
+  String? questionDog;
   List personSexList = ['남자', '여자'];
   List personJobList = ['학생', '직장인', '주부', '어르신'];
   var personSex;
@@ -78,6 +79,33 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
     }
   }
 
+  void getUserInfo() async {
+    http.Response response = await http
+        .get(Uri.parse('http://$ipAddress/users/info?email=$userEmail'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      name = parsingData['name'];
+      selected_sex = parsingData['sex'];
+      age = parsingData['age'];
+      durationWalking = parsingData['durationWalking'];
+      walkTime = parsingData['walkTime'];
+      selected_job = parsingData['job'];
+      advice = parsingData['advice'];
+      questionDog = parsingData['questionDog'];
+      nameController = TextEditingController(text: name);
+      ageController = TextEditingController(text: age);
+      durationWalkingController = TextEditingController(text: durationWalking);
+      walkTimeController = TextEditingController(text: walkTime);
+      adviceController = TextEditingController(text: advice);
+      questionDogController = TextEditingController(text: questionDog);
+
+      print('abcd ---  $name');
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   void initState() {
     getCurrentUser();
@@ -101,6 +129,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
         actions: [
           IconButton(
               onPressed: () {
+                getUserInfo();
                 setState(() {});
               },
               icon: Icon(
@@ -171,7 +200,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         ),
                         filled: true,
                         hintStyle: TextStyle(color: Colors.grey[800]),
-                        hintText: name,
+                        hintText: "보호자 이름을 작성해주세요.",
                         fillColor: Colors.white),
                   ),
                 ],
@@ -230,7 +259,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: age,
+                            hintText: "보호자 나이를 작성해주세요.",
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -371,7 +400,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: durationWalking,
+                            hintText: "산책 소요시간을 작성해주세요.",
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -428,7 +457,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: durationWalking,
+                            hintText: "산책 소요시간을 작성해주세요.",
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -536,7 +565,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                             ),
                             filled: true,
                             hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: advice,
+                            hintText: "조언 가능 분야를 작성해주세요.",
                             fillColor: Colors.white),
                       ),
                     ])),
@@ -561,7 +590,7 @@ class _EditPersonProfileState extends State<EditPersonProfile> {
                         ),
                         filled: true,
                         hintStyle: TextStyle(color: Colors.grey[800]),
-                        hintText: questionDog,
+                        hintText: "강아지에 대한 궁금한점을 작성해주세요.",
                         fillColor: Colors.white),
                   ),
                   SizedBox(
