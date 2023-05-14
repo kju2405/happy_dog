@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:happy_dog/popup_windows/walk_finish_popup.dart';
 import 'package:happy_dog/provider/location_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   final String? userEmail;
@@ -14,19 +15,79 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int stop() {
+    timer!.cancel();
+    setState(() {
+      started = false;
+    });
+    return int.parse(digitMinutes) + int.parse(digitHours * 60);
+  }
+
+  //reset function
+  void reset() {
+    timer!.cancel();
+    setState(() {
+      seconds = 0;
+      minutes = 0;
+      hours = 0;
+
+      digitSeconds = "00";
+      digitMinutes = "00";
+      digitHours = "00";
+
+      started = false;
+    });
+  }
+
+  //start function
+  void start() {
+    started = true;
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      int localSeconds = seconds + 1;
+      int localMinutes = minutes;
+      int localHours = hours;
+
+      if (localSeconds > 59) {
+        if (localMinutes > 59) {
+          localHours++;
+          localMinutes = 0;
+        } else {
+          localMinutes++;
+          localSeconds = 0;
+        }
+      }
+      setState(() {
+        seconds = localSeconds;
+        minutes = localMinutes;
+        hours = localHours;
+        digitSeconds = (seconds >= 10) ? "$seconds" : "0$seconds";
+        digitMinutes = (minutes >= 10) ? "$minutes" : "0$minutes";
+        digitHours = (hours >= 10) ? "$hours" : "0$hours";
+      });
+    });
+  }
+
+  bool status = false;
+  int seconds = 0, minutes = 0, hours = 0;
+  String digitSeconds = "00", digitMinutes = "00", digitHours = "00";
+  Timer? timer;
+  bool started = false;
+
   void showAlert(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.white,
-          child: WalkFinished(),
+          child: WalkFinished(
+            hours: digitHours,
+            minutes: digitMinutes,
+            seconds: digitSeconds,
+          ),
         );
       },
     );
   }
-
-  bool status = false;
 
   @override
   void initState() {
@@ -79,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '산책 시간 : 00시00분',
+                      '산책 시간 : $digitHours:$digitMinutes:$digitSeconds',
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(
@@ -103,9 +164,12 @@ class _HomePageState extends State<HomePage> {
                               });
                               if (status == false) {
                                 print('산책 종료');
+                                int walkingTime = stop();
                                 showAlert(context);
+                                print('walkingTime : $walkingTime');
                               } else {
                                 print('산책 시작');
+                                start();
                               }
                             }),
                       ],
