@@ -61,6 +61,28 @@ class _EditDogProfileState extends State<EditDogProfile> {
     }
   }
 
+  updateDogInfo() async {
+    var url = 'http://$ipAddress/dog/update';
+    var body = {
+      "userEmail": userEmail,
+      "dogName": dogNameController.text.toString(),
+      "dogAge": dogAgeController.text.toString(),
+      "dogSex": selected_sex,
+      "dogKind": dogKindController.text.toString(),
+      "dogFeature": dogFeatureController.text.toString(),
+    };
+
+    var data = await http.post(Uri.parse(url),
+        body: json.encode(body),
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    if (data.statusCode == 200) {
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   void initState() {
     getCurrentUser();
@@ -265,7 +287,10 @@ class _EditDogProfileState extends State<EditDogProfile> {
                       height: MediaQuery.of(context).size.height * 0.06,
                       child: ElevatedButton(
                         child: Text("프로필 변경사항 저장하기"),
-                        onPressed: () {},
+                        onPressed: () {
+                          updateDogInfo();
+                          Navigator.pop(context);
+                        },
                       ),
                     ),
                   ),
