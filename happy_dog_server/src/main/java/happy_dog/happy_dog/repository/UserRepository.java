@@ -22,7 +22,7 @@ public class UserRepository {
 
     public void saveDogInfo(String useremail) throws SQLException {
         //dog 테이블에 사용자 이메일 저장
-        String sql="insert into dog(useremail) values(?)";
+        String sql="insert into dog(useremail,dogname,dogage,dogsex,dogkind,dogfeature) values(?,?,?,?,?,?);";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -32,6 +32,11 @@ public class UserRepository {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, useremail);
+            pstmt.setString(2, "");
+            pstmt.setString(3, "");
+            pstmt.setString(4, "");
+            pstmt.setString(5, "");
+            pstmt.setString(6, "");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             log.error("db error",e);
@@ -42,7 +47,7 @@ public class UserRepository {
     }
 
     public void updateDogInfo(Dog dog) throws SQLException {
-        String sql="update dog set dogname=?, dogage=?,dogsex=?, dogkind=?, dogfeature=? where useremail=?";
+        String sql="update dog set dogname=?, dogage=?,dogsex=?, dogkind=?, dogfeature=? where useremail=?;";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -67,7 +72,7 @@ public class UserRepository {
         }
     }
     public void update(String email, String name,String sex,String age,String durationWalking,String walkTime,String job, String advice, String questionDog) throws SQLException {
-        String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where email=?";
+        String sql = "update users set name=?, sex=?, age=?, durationWalking=?, walkTime=?, job=?, advice=?, questionDog=? where email=?;";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -96,7 +101,7 @@ public class UserRepository {
     }
 
     public void delete(String memberid) throws SQLException {
-        String sql = "delete from member where member_id = ?";
+        String sql = "delete from member where member_id = ?;";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -116,7 +121,7 @@ public class UserRepository {
     }
 
     public User save(User user) throws SQLException {
-        String sql = "insert into users(email,password,name) values (?, ?, ?)";
+        String sql = "insert into users(email,password,name,sex,age,durationWalking,walkTime,job,advice,questionDog) values (?, ?, ?,?,?,?,?,?,?,?);";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -128,6 +133,14 @@ public class UserRepository {
             pstmt.setString(1, user.getEmail());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getName());
+            pstmt.setString(4, user.getSex());
+            pstmt.setString(5, user.getAge());
+            pstmt.setString(6, user.getDurationWalking());
+            pstmt.setString(7, user.getWalkTime());
+            pstmt.setString(8, user.getJob());
+            pstmt.setString(9, user.getAdvice());
+            pstmt.setString(10, user.getQuestionDog());
+
             pstmt.executeUpdate();
             return user;
         } catch (SQLException e) {
@@ -139,7 +152,7 @@ public class UserRepository {
     }
 
     public User findByEmail(String email) throws SQLException {
-        String sql = "select * from users where email=?";
+        String sql = "select * from users where email=?;";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -177,7 +190,7 @@ public class UserRepository {
     }
 
     public Dog findDogByEmail(String email) throws SQLException {
-        String sql = "select * from dog where useremail=?";
+        String sql = "select * from dog where useremail=?;";
 
         Connection con = null;
         PreparedStatement pstmt = null;

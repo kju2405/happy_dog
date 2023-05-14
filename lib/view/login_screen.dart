@@ -25,6 +25,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+  String userSex = '';
+  String userAge = '';
+  String userDurationWalking = '';
+  String userWalkTime = '';
+  String userJob = '';
+  String userAdvice = '';
+  String userQuestionDog = '';
 
   addUserToDB() async {
     var url = 'http://$ipAddress/users/join';
@@ -32,6 +39,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       "email": userEmail,
       "password": userPassword,
       "name": userName,
+      "sex": userSex,
+      "age": userAge,
+      "durationWalking": userDurationWalking,
+      "walkTime": userWalkTime,
+      "job": userJob,
+      "advice": userAdvice,
+      "questionDog": userQuestionDog
     };
 
     var data = await http.post(Uri.parse(url),
