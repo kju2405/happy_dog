@@ -15,6 +15,29 @@ class _RecommendPageState extends State<RecommendPage> {
   int _walkingTime = 1;
   int _walkingType = 2;
   int _walkingDifficultyLevel = 3;
+
+  List walkingKeywordsList = [
+    '변이 많아요',
+    '횡단보도가 많아요',
+    '한적해요',
+    '배변봉투 수거함이 있어요',
+    '들판이 있어요',
+    '사람이 많아요',
+    '자전거가 많이 다녀요',
+    '길이 깨끗해요',
+    '길이 더러워요',
+    '뛰어놀 수 있는 곳이 있어요',
+    '강아지들이 많아요',
+    '강아지가 없어요',
+    '줄을 짧게 잡아야 해요',
+    '쉴 수 있는 벤치가 있어요',
+    '그늘이 많아요',
+    '나무가 많아요'
+  ];
+  var walkingKeyword1;
+  String? selectedWalkingKeyword1 = '';
+  var walkingKeyword2;
+  String? selectedWalkingKeyword2 = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +84,7 @@ class _RecommendPageState extends State<RecommendPage> {
               ),
             ),
             SizedBox(
-              height: 100,
+              height: 30,
             ),
             Text(
               '- 산책 시간 -',
@@ -280,8 +303,95 @@ class _RecommendPageState extends State<RecommendPage> {
                 ),
               ],
             ),
+            Text(
+              '- 산책 키워드 -',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(
-              height: 50,
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.05,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: walkingKeyword1,
+                    items: walkingKeywordsList!.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    hint: Container(
+                      child: Text(
+                        '첫번째 산책 키워드를 선택해주세요.',
+                        style: TextStyle(color: Colors.grey),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          walkingKeyword1 = value;
+                          selectedWalkingKeyword1 = walkingKeyword1;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.05,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: walkingKeyword2,
+                    items: walkingKeywordsList!.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    hint: Container(
+                      child: Text(
+                        '두번째 산책 키워드를 선택해주세요.',
+                        style: TextStyle(color: Colors.grey),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          walkingKeyword2 = value;
+                          selectedWalkingKeyword2 = walkingKeyword2;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton.icon(
               onPressed: () {
