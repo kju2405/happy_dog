@@ -133,15 +133,35 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             Container(
-              height: 80,
+              height: 110,
               child: Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '산책 시간 : $digitHours:$digitMinutes:$digitSeconds',
-                      style: TextStyle(fontSize: 20),
+                    Row(
+                      children: [
+                        Text(
+                          '산책 시간 : $digitHours:$digitMinutes:$digitSeconds',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            reset();
+                          },
+                          icon: Icon(
+                            Icons.settings_backup_restore,
+                            color: Colors.green,
+                          ),
+                          label: Text(
+                            '시간 초기화',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 20,
