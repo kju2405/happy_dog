@@ -1,20 +1,12 @@
 package happy_dog.happy_dog.basic;
 
-import com.zaxxer.hikari.HikariDataSource;
-import happy_dog.happy_dog.connection.ConnectionConst;
-import happy_dog.happy_dog.domain.Member;
-import happy_dog.happy_dog.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.SQLException;
-
-import static happy_dog.happy_dog.connection.ConnectionConst.*;
 
 @WebServlet(name = "helloServlet", urlPatterns = "/hello")
 public class HelloServlet extends HttpServlet {

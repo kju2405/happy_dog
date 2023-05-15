@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class WalkFinished extends StatefulWidget {
   final hours;
@@ -15,10 +20,21 @@ class _WalkFinishedState extends State<WalkFinished> {
   String hours = '';
   String minutes = '';
   String seconds = '';
+  String userEmail = '';
+  int minuteData = 0;
 
   List walkingTypeList = ['걷기', '달리기', '등산'];
   var walkingType;
   String? selectedWalkingType = '';
+  List personJobList = ['학생', '직장인', '주부', '어르신'];
+  var personJob;
+  String? selectedPersonJob = '';
+  List dogAgeList = ['0~4살', '5~8살', '9살~'];
+  var dogAge;
+  String? selectedDogAge = '';
+  List walkingStisList = ['낮음', '중간', '높음'];
+  var walkingSatis;
+  String? selectedWalkingSatis = '';
   List walkingLevelList = ['편함', '보통', '힘듬'];
   var walkingLevel;
   String? selectedWalkingLevel = '';
@@ -44,13 +60,51 @@ class _WalkFinishedState extends State<WalkFinished> {
   String? selectedWalkingKeyword1 = '';
   var walkingKeyword2;
   String? selectedWalkingKeyword2 = '';
+  String ipAddress = IpAddress.ipAddress;
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      if (user != null) {
+        loggedUser = user;
+        print(loggedUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  saveRouteInfo() async {
+    var url = 'http://$ipAddress/route/save';
+    var body = {
+      "userEmail": userEmail,
+      "minutes": minuteData,
+      "walkKind": selectedWalkingType,
+      "walkLevel": selectedWalkingLevel,
+      "keyword1": selectedWalkingKeyword1,
+      "keyword2": selectedWalkingKeyword2,
+    };
+
+    var data = await http.post(Uri.parse(url),
+        body: json.encode(body),
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    if (data.statusCode == 200) {
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10),
       width: 400,
-      height: 700,
+      height: 800,
+      decoration: BoxDecoration(border: Border.all()),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -62,7 +116,7 @@ class _WalkFinishedState extends State<WalkFinished> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 10,
           ),
           Text(
             "- 산책 시간 -",
@@ -74,7 +128,97 @@ class _WalkFinishedState extends State<WalkFinished> {
             style: TextStyle(color: Colors.black, fontSize: 20),
           ),
           SizedBox(
-            height: 40,
+            height: 10,
+          ),
+          Text(
+            "- 보호자 직업 -",
+            style: TextStyle(
+                color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.05,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: personJob,
+                  items: personJobList!.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  hint: Container(
+                    child: Text(
+                      '보호자의 직업을 선택해주세요.',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        personJob = value;
+                        selectedPersonJob = personJob;
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "- 강아지 나이 -",
+            style: TextStyle(
+                color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.05,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: dogAge,
+                  items: dogAgeList!.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  hint: Container(
+                    child: Text(
+                      '강아지 나이를 선택해주세요.',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        dogAge = value;
+                        selectedDogAge = dogAge;
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
           ),
           Text(
             "- 산책 유형 -",
@@ -83,7 +227,7 @@ class _WalkFinishedState extends State<WalkFinished> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.06,
+            height: MediaQuery.of(context).size.height * 0.05,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 color: Colors.white,
@@ -119,7 +263,52 @@ class _WalkFinishedState extends State<WalkFinished> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 20,
+          ),
+          Text(
+            "- 산책 만족도 -",
+            style: TextStyle(
+                color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.05,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: walkingSatis,
+                  items: walkingStisList!.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  hint: Container(
+                    child: Text(
+                      '산책 만족도를 선택해주세요.',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        walkingSatis = value;
+                        selectedWalkingSatis = walkingSatis;
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Text(
             "- 산책 난이도 -",
@@ -128,7 +317,7 @@ class _WalkFinishedState extends State<WalkFinished> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.06,
+            height: MediaQuery.of(context).size.height * 0.05,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 color: Colors.white,
@@ -164,7 +353,7 @@ class _WalkFinishedState extends State<WalkFinished> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 10,
           ),
           Text(
             "- 산책 키워드 -",
@@ -173,7 +362,7 @@ class _WalkFinishedState extends State<WalkFinished> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.06,
+            height: MediaQuery.of(context).size.height * 0.05,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 color: Colors.white,
@@ -209,11 +398,11 @@ class _WalkFinishedState extends State<WalkFinished> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.06,
+            height: MediaQuery.of(context).size.height * 0.05,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 color: Colors.white,
@@ -249,7 +438,7 @@ class _WalkFinishedState extends State<WalkFinished> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 20,
           ),
           Text(
             '산책 경로를 공유하시겠어요?',
@@ -261,6 +450,7 @@ class _WalkFinishedState extends State<WalkFinished> {
             children: [
               TextButton.icon(
                 onPressed: () {
+                  saveRouteInfo();
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.check),
@@ -285,5 +475,8 @@ class _WalkFinishedState extends State<WalkFinished> {
     hours = widget.hours;
     minutes = widget.minutes;
     seconds = widget.seconds;
+    minuteData = int.parse(hours) * 60 + int.parse(minutes);
+    getCurrentUser();
+    userEmail = loggedUser!.email!;
   }
 }

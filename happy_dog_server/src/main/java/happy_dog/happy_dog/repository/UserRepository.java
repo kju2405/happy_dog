@@ -1,12 +1,13 @@
 package happy_dog.happy_dog.repository;
 
 import happy_dog.happy_dog.domain.Dog;
-import happy_dog.happy_dog.domain.Member;
+import happy_dog.happy_dog.domain.Route;
 import happy_dog.happy_dog.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
 
 import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
 import java.sql.*;
 import java.util.NoSuchElementException;
 
@@ -66,6 +67,74 @@ public class UserRepository {
             log.info("resultSize={}", resultSize);
         } catch (SQLException e) {
             log.error("db error", e);
+            throw e;
+        }finally {
+            close(con, pstmt, null);
+        }
+    }
+    public void saveImg(String filename, ByteArrayInputStream data) throws SQLException {
+        String sql="INSERT INTO images (filename, data) VALUES (?, ?)";
+
+        Connection con=null;
+        PreparedStatement pstmt=null;
+
+        try {
+            con=getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, filename);
+            pstmt.setBinaryStream(2,data);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, null);
+        }
+    }
+
+    public void saveRoute(Route route) throws SQLException {
+        String sql="insert into routes (useremail, minutes, walkKind, walkLevel, keyword1, keyword2) values (?,?,?,?,?,?);";
+
+        Connection con=null;
+        PreparedStatement pstmt=null;
+
+        try {
+            con=getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, route.getUserEmail());
+            if (route.getMinutes() <= 30) {
+                pstmt.setString(2,"VERYLOW");
+            } else if (route.getMinutes() <= 60) {
+                pstmt.setString(2, "LOW");
+            } else if (route.getMinutes() <= 90) {
+                pstmt.setString(2, "MIDDLE");
+            } else if (route.getMinutes() <= 120) {
+                pstmt.setString(2, "HIGH");
+            } else {
+                pstmt.setString(2,"TOOHIGH");
+            }
+
+            if (route.getWalkKind().equals("걷기")) {
+                pstmt.setString(3, "WALK");
+            } else if (route.getWalkKind().equals("달리기")) {
+                pstmt.setString(3, "RUN");
+            } else {
+                pstmt.setString(3, "CLIMB");
+            }
+
+            if (route.getWalkLevel().equals("편함")) {
+                pstmt.setString(4, "EASY");
+            } else if (route.getWalkLevel().equals("보통")) {
+                pstmt.setString(4,"NORMAL");
+            } else {
+                pstmt.setString(4,"HARD");
+            }
+
+            pstmt.setString(5, route.getKeyword1());
+            pstmt.setString(6, route.getKeyword2());
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            log.error("db error",e);
             throw e;
         }finally {
             close(con, pstmt, null);
