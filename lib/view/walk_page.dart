@@ -3,6 +3,9 @@ import 'package:happy_dog/controller/route_controller.dart';
 import 'package:happy_dog/view/home.dart';
 import 'package:happy_dog/view/home_page.dart';
 import 'package:get/get.dart';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class WalkingPage extends StatefulWidget {
   final String? userEmail;
@@ -14,11 +17,39 @@ class WalkingPage extends StatefulWidget {
 
 class _WalkingPageState extends State<WalkingPage> {
   final RouteController routeController = Get.put(RouteController());
+
+  String ipAddress = IpAddress.ipAddress;
+  var routeData;
   String? userEmail;
+  int? minutes;
+  String? personAge;
+  String? dogAge;
+  String? walkKind;
+  String? walkLevel;
+  String? walkStatis;
+  String? keyword1;
+  String? keyword2;
+  int routeNum = 0;
   @override
   void initState() {
     userEmail = widget.userEmail;
     print('Walking page $userEmail');
+  }
+
+  void getRouteInfo() async {
+    http.Response response =
+        await http.get(Uri.parse('http://$ipAddress/routes'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      routeData = parsingData;
+      print(routeData.length);
+      routeNum = routeData.length;
+      // name = parsingData['name'];
+      // nameController = TextEditingController(text: name);
+    } else {
+      print(response.statusCode);
+    }
   }
 
   @override
@@ -32,6 +63,7 @@ class _WalkingPageState extends State<WalkingPage> {
         actions: [
           IconButton(
               onPressed: () {
+                getRouteInfo();
                 setState(() {});
               },
               icon: Icon(
@@ -53,7 +85,7 @@ class _WalkingPageState extends State<WalkingPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 3,
+              itemCount: routeNum,
               itemBuilder: (context, index) {
                 return Card(
                   margin: EdgeInsets.all(12),
@@ -69,64 +101,73 @@ class _WalkingPageState extends State<WalkingPage> {
                           height: 10,
                         ),
                         Text(
-                          '학생(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                          '보호자 연령대 : ' + routeData[index]['personAge'],
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 17,
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          '주부(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                          '반려견 연령대 : ' + routeData[index]['dogAge'],
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 17,
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          '직장인(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                          '산책 유형 : ' +
+                              (routeData[index]['walkKind'] == 'CLIMB'
+                                  ? '등산'
+                                  : (routeData[index]['walkKind'] == 'WALK'
+                                      ? '걷기'
+                                      : '달리기')),
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 17,
                           ),
                         ),
                         SizedBox(
                           height: 7,
                         ),
                         Text(
-                          '0 ~ 4살 : 난이도: 5 / 흥분도: 7',
+                          '산책 난이도 : ' +
+                              (routeData[index]['walkLevel'] == 'HARD'
+                                  ? '힘듬'
+                                  : (routeData[index]['walkLevel'] == 'NORMAL'
+                                      ? '보통'
+                                      : '쉬움')),
                           style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
                           height: 7,
                         ),
                         Text(
-                          '5 ~ 8살 : 난이도: 5 / 흥분도: 7',
+                          '산책 만족도 : ' + routeData[index]['walkStatis'],
                           style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
                           height: 7,
                         ),
                         Text(
-                          '9살 ~  : 난이도: 5 / 흥분도: 7',
+                          '키워드1 : ' + routeData[index]['keyword1'],
                           style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
                           height: 7,
                         ),
                         Text(
-                          '- 자전거가 많이 다녀요 (8)',
-                          style: TextStyle(fontSize: 14),
+                          '키워드2 : ' + routeData[index]['keyword2'],
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        SizedBox(
+                          height: 7,
                         ),
                         Text(
-                          '- 쓰레기가 많아요 (13)',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Text(
-                          '- 뛰어다닐 수 있어요 (9)',
-                          style: TextStyle(fontSize: 14),
+                          'by : ' + routeData[index]['userEmail'],
+                          style: TextStyle(fontSize: 17),
                         ),
                         SizedBox(
                           height: 10,

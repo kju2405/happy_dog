@@ -9,6 +9,8 @@ import org.springframework.jdbc.support.JdbcUtils;
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -93,7 +95,7 @@ public class UserRepository {
     }
 
     public void saveRoute(Route route) throws SQLException {
-        String sql="insert into routes (useremail, minutes, walkKind, walkLevel, keyword1, keyword2) values (?,?,?,?,?,?);";
+        String sql="insert into routes (useremail, minutesWord, walkKind, walkLevel, keyword1, keyword2,minutes,personAge,dogAge,walkStatis) values (?,?,?,?,?,?,?,?,?,?);";
 
         Connection con=null;
         PreparedStatement pstmt=null;
@@ -132,6 +134,10 @@ public class UserRepository {
 
             pstmt.setString(5, route.getKeyword1());
             pstmt.setString(6, route.getKeyword2());
+            pstmt.setInt(7,route.getMinutes());
+            pstmt.setString(8,route.getPersonAge());
+            pstmt.setString(9, route.getDogAge());
+            pstmt.setString(10, route.getWalkStatis());
             pstmt.executeUpdate();
         }catch (SQLException e){
             log.error("db error",e);
@@ -290,6 +296,41 @@ public class UserRepository {
         }finally {
             close(con, pstmt, rs);
         }
+    }
+
+    public List<Route> findRoutes() throws SQLException {
+        String sql = "select * from routes;";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Route> routeResult = new ArrayList<>();
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Route route = new Route();
+                route.setUserEmail(rs.getString("useremail"));
+                route.setMinutes(rs.getInt("minutes"));
+                route.setWalkKind(rs.getString("walkKind"));
+                route.setWalkLevel(rs.getString("walkLevel"));
+                route.setKeyword1(rs.getString("keyword1"));
+                route.setKeyword2(rs.getString("keyword2"));
+                route.setPersonAge(rs.getString("personAge"));
+                route.setDogAge(rs.getString("dogAge"));
+                route.setWalkStatis(rs.getString("walkStatis"));
+                routeResult.add(route);
+            }
+        } catch (SQLException e) {
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+        return routeResult;
     }
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
