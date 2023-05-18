@@ -1,13 +1,10 @@
 package happy_dog.happy_dog.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
-import happy_dog.happy_dog.connection.ConnectionConst;
-import happy_dog.happy_dog.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;

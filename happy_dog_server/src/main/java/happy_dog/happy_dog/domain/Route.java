@@ -8,8 +8,11 @@ import lombok.Setter;
 public class Route {
     private String userEmail;
     private int minutes;
+    private String personAge;
+    private String dogAge;
     private String walkKind;
     private String walkLevel;
+    private String walkStatis;
     private String keyword1;
     private String keyword2;
 

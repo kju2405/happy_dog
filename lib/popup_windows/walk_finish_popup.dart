@@ -26,9 +26,9 @@ class _WalkFinishedState extends State<WalkFinished> {
   List walkingTypeList = ['걷기', '달리기', '등산'];
   var walkingType;
   String? selectedWalkingType = '';
-  List personJobList = ['학생', '직장인', '주부', '어르신'];
-  var personJob;
-  String? selectedPersonJob = '';
+  List personAgeList = ['30대 이하', '40대', '50대', '60대 이상'];
+  var personAge;
+  String? selectedPersonAge = '';
   List dogAgeList = ['0~4살', '5~8살', '9살~'];
   var dogAge;
   String? selectedDogAge = '';
@@ -81,7 +81,10 @@ class _WalkFinishedState extends State<WalkFinished> {
     var body = {
       "userEmail": userEmail,
       "minutes": minuteData,
+      "personAge": selectedPersonAge,
+      "dogAge": selectedDogAge,
       "walkKind": selectedWalkingType,
+      "walkStatis": selectedWalkingSatis,
       "walkLevel": selectedWalkingLevel,
       "keyword1": selectedWalkingKeyword1,
       "keyword2": selectedWalkingKeyword2,
@@ -131,7 +134,7 @@ class _WalkFinishedState extends State<WalkFinished> {
             height: 10,
           ),
           Text(
-            "- 보호자 직업 -",
+            "- 보호자 나이 -",
             style: TextStyle(
                 color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
           ),
@@ -146,8 +149,8 @@ class _WalkFinishedState extends State<WalkFinished> {
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
-                  value: personJob,
-                  items: personJobList!.map((value) {
+                  value: personAge,
+                  items: personAgeList!.map((value) {
                     return DropdownMenuItem(
                       value: value,
                       child: Text(value),
@@ -155,7 +158,7 @@ class _WalkFinishedState extends State<WalkFinished> {
                   }).toList(),
                   hint: Container(
                     child: Text(
-                      '보호자의 직업을 선택해주세요.',
+                      '보호자의 나이를 선택해주세요.',
                       style: TextStyle(color: Colors.grey),
                       textAlign: TextAlign.end,
                     ),
@@ -163,8 +166,8 @@ class _WalkFinishedState extends State<WalkFinished> {
                   onChanged: (value) {
                     setState(
                       () {
-                        personJob = value;
-                        selectedPersonJob = personJob;
+                        personAge = value;
+                        selectedPersonAge = personAge;
                       },
                     );
                   },
