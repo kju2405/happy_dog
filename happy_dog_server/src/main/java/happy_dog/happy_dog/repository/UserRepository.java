@@ -322,6 +322,7 @@ public class UserRepository {
                 route.setPersonAge(rs.getString("personAge"));
                 route.setDogAge(rs.getString("dogAge"));
                 route.setWalkStatis(rs.getString("walkStatis"));
+                route.setMinutesWord(rs.getString("minutesWord"));
                 routeResult.add(route);
             }
         } catch (SQLException e) {

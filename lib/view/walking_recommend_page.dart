@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:happy_dog/view/recommend_looking_page.dart';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecommendPage extends StatefulWidget {
   final String? userEmail;
@@ -38,6 +41,48 @@ class _RecommendPageState extends State<RecommendPage> {
   String? selectedWalkingKeyword1 = '';
   var walkingKeyword2;
   String? selectedWalkingKeyword2 = '';
+
+  String ipAddressFlask = IpAddress.ipAddressFlask;
+  String ipAddress = IpAddress.ipAddress;
+  var routeData;
+
+  void sendRecommendInfo() async {
+    var url = 'http://$ipAddressFlask/recommendroutes';
+    var body = {
+      "walkingTime": _walkingTime,
+      "walkingType": _walkingType,
+      "walkingLevel": _walkingDifficultyLevel,
+      "keyword1": selectedWalkingKeyword1,
+      "keyword2": selectedWalkingKeyword2,
+      "routeList": routeData
+    };
+
+    var data = await http.post(Uri.parse(url),
+        body: json.encode(body),
+        headers: {"Content-Type": "application/json"},
+        encoding: Encoding.getByName("utf-8"));
+
+    if (data.statusCode == 200) {
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  void getRouteInfo() async {
+    http.Response response =
+        await http.get(Uri.parse('http://$ipAddress/routes'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      routeData = parsingData;
+      print(routeData.length);
+      // name = parsingData['name'];
+      // nameController = TextEditingController(text: name);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +93,7 @@ class _RecommendPageState extends State<RecommendPage> {
         actions: [
           IconButton(
               onPressed: () {
+                getRouteInfo();
                 setState(() {});
               },
               icon: Icon(
@@ -395,6 +441,8 @@ class _RecommendPageState extends State<RecommendPage> {
             ),
             ElevatedButton.icon(
               onPressed: () {
+                // getRouteInfo();
+                sendRecommendInfo();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -15,6 +15,7 @@ public class Route {
     private String walkStatis;
     private String keyword1;
     private String keyword2;
+    private String minutesWord;
 
     public Route() {
     }
