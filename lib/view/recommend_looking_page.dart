@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LookingRecommend extends StatefulWidget {
   const LookingRecommend({Key? key}) : super(key: key);
@@ -8,6 +11,34 @@ class LookingRecommend extends StatefulWidget {
 }
 
 class _LookingRecommendState extends State<LookingRecommend> {
+  String ipAddressFlask = IpAddress.ipAddressFlask;
+  var routeData;
+  int routeNum = 0;
+  var recommendList;
+  var routeList;
+
+  void getRecommendRouteList() async {
+    http.Response response =
+        await http.get(Uri.parse('http://$ipAddressFlask/recommendrouteList'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      routeData = parsingData;
+      // print(routeData.length);
+      routeNum = routeData['recommendList'].length;
+      print(routeNum);
+      recommendList = routeData['recommendList'];
+      routeList = routeData['routeList'];
+      print(recommendList);
+      print('-------');
+      print(routeList);
+      // name = parsingData['name'];
+      // nameController = TextEditingController(text: name);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,13 +46,24 @@ class _LookingRecommendState extends State<LookingRecommend> {
       appBar: AppBar(
         title: Text('오늘 이렇게 산책하는건 어때요?'),
         backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+              onPressed: () {
+                getRecommendRouteList();
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              )),
+        ],
       ),
       body: Center(
         child: Column(
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: 3,
+                itemCount: routeNum,
                 itemBuilder: (context, index) {
                   return Card(
                     margin: EdgeInsets.all(12),
@@ -37,64 +79,100 @@ class _LookingRecommendState extends State<LookingRecommend> {
                             height: 10,
                           ),
                           Text(
-                            '학생(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                            '산책 소요시간 : ' +
+                                routeList[recommendList[index]]['minutes']
+                                    .toString() +
+                                ' 분',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 17,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '보호자 연령대 : ' +
+                                routeList[recommendList[index]]['personAge'],
+                            style: TextStyle(
+                              fontSize: 17,
                             ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Text(
-                            '주부(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                            '반려견 연령대 : ' +
+                                routeList[recommendList[index]]['dogAge'],
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 17,
                             ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Text(
-                            '직장인(15명) - 소요시간: 00시 00분 / 만족도: 7 / 난이도: 5',
+                            '산책 유형 : ' +
+                                (routeList[recommendList[index]]['walkKind'] ==
+                                        'CLIMB'
+                                    ? '등산'
+                                    : (routeList[recommendList[index]]
+                                                ['walkKind'] ==
+                                            'WALK'
+                                        ? '걷기'
+                                        : '달리기')),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 17,
                             ),
                           ),
                           SizedBox(
                             height: 7,
                           ),
                           Text(
-                            '0 ~ 4살 : 난이도: 5 / 흥분도: 7',
+                            '산책 난이도 : ' +
+                                (routeList[recommendList[index]]['walkLevel'] ==
+                                        'HARD'
+                                    ? '힘듬'
+                                    : (routeList[recommendList[index]]
+                                                ['walkLevel'] ==
+                                            'NORMAL'
+                                        ? '보통'
+                                        : '쉬움')),
                             style: TextStyle(fontSize: 17),
                           ),
                           SizedBox(
                             height: 7,
                           ),
                           Text(
-                            '5 ~ 8살 : 난이도: 5 / 흥분도: 7',
+                            '산책 만족도 : ' +
+                                routeList[recommendList[index]]['walkStatis'],
                             style: TextStyle(fontSize: 17),
                           ),
                           SizedBox(
                             height: 7,
                           ),
                           Text(
-                            '9살 ~  : 난이도: 5 / 흥분도: 7',
+                            '키워드1 : ' +
+                                routeList[recommendList[index]]['keyword1'],
                             style: TextStyle(fontSize: 17),
                           ),
                           SizedBox(
                             height: 7,
                           ),
                           Text(
-                            '- 자전거가 많이 다녀요 (8)',
-                            style: TextStyle(fontSize: 14),
+                            '키워드2 : ' +
+                                routeList[recommendList[index]]['keyword2'],
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          SizedBox(
+                            height: 7,
                           ),
                           Text(
-                            '- 쓰레기가 많아요 (13)',
-                            style: TextStyle(fontSize: 14),
+                            'by : ' +
+                                routeList[recommendList[index]]['userEmail'],
+                            style: TextStyle(fontSize: 17),
                           ),
-                          Text(
-                            '- 뛰어다닐 수 있어요 (9)',
-                            style: TextStyle(fontSize: 14),
+                          SizedBox(
+                            height: 10,
                           ),
                         ], // 추천 버튼과 이 경로로 산책하기 버튼 추가할것.
                       ),

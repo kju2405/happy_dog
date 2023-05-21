@@ -310,7 +310,7 @@ class _RecommendPageState extends State<RecommendPage> {
                         );
                       },
                     ),
-                    Text('1 ~ 3'),
+                    Text('낮음'),
                   ],
                 ),
                 Row(
@@ -327,7 +327,7 @@ class _RecommendPageState extends State<RecommendPage> {
                         );
                       },
                     ),
-                    Text('4 ~ 7'),
+                    Text('중간'),
                   ],
                 ),
                 Row(
@@ -344,7 +344,7 @@ class _RecommendPageState extends State<RecommendPage> {
                         );
                       },
                     ),
-                    Text('8 ~ 10'),
+                    Text('높음'),
                   ],
                 ),
               ],

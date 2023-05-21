@@ -28,6 +28,8 @@ def get_recommendations(cosine_sim):
 
 @app.route('/recommendroutes',methods=['POST'])
 def recommend():
+    global recommendList
+    global routeList
     print(request.is_json)
     params=request.get_json()
     # routeList.append(params['routeList'])
@@ -80,9 +82,18 @@ def recommend():
     print(df['soup'])
     print(cosine_sim)
     print(routes_indices)
+    
+    print('-------------')
     print(recommendList)
+    print(routeList)
 
     return 'ok'
+
+@app.route('/recommendrouteList',methods=['GET'])
+def recommendrouteList():
+
+    return jsonify({'routeList':routeList,'recommendList':recommendList})
+
  
  
 app.run(host='0.0.0.0',port='5001' ,debug=True)
