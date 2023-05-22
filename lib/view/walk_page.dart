@@ -101,6 +101,17 @@ class _WalkingPageState extends State<WalkingPage> {
                           height: 10,
                         ),
                         Text(
+                          '산책 소요시간 : ' +
+                              routeData[index]['minutes'].toString() +
+                              '분',
+                          style: TextStyle(
+                            fontSize: 17,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
                           '보호자 연령대 : ' + routeData[index]['personAge'],
                           style: TextStyle(
                             fontSize: 17,
