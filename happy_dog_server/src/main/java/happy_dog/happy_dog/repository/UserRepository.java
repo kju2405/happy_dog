@@ -333,6 +333,43 @@ public class UserRepository {
         }
         return routeResult;
     }
+
+    public List<Route> findMyRoutes(String email) throws SQLException {
+        String sql = "select * from routes where useremail=?;";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Route> routeResult = new ArrayList<>();
+
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Route route = new Route();
+                route.setUserEmail(rs.getString("useremail"));
+                route.setMinutes(rs.getInt("minutes"));
+                route.setWalkKind(rs.getString("walkKind"));
+                route.setWalkLevel(rs.getString("walkLevel"));
+                route.setKeyword1(rs.getString("keyword1"));
+                route.setKeyword2(rs.getString("keyword2"));
+                route.setPersonAge(rs.getString("personAge"));
+                route.setDogAge(rs.getString("dogAge"));
+                route.setWalkStatis(rs.getString("walkStatis"));
+                route.setMinutesWord(rs.getString("minutesWord"));
+                routeResult.add(route);
+            }
+        } catch (SQLException e) {
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+        return routeResult;
+    }
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
         JdbcUtils.closeStatement(stmt);
