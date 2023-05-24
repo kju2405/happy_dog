@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../config/ipAddress.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +13,9 @@ class WalkFinished extends StatefulWidget {
   final hours;
   final minutes;
   final seconds;
-  const WalkFinished({Key? key, this.hours, this.minutes, this.seconds})
+  final routeLastId;
+  const WalkFinished(
+      {Key? key, this.hours, this.minutes, this.seconds, this.routeLastId})
       : super(key: key);
 
   @override
@@ -21,6 +27,7 @@ class _WalkFinishedState extends State<WalkFinished> {
   String minutes = '';
   String seconds = '';
   String userEmail = '';
+  int lastRouteId = 0;
   int minuteData = 0;
 
   List walkingTypeList = ['걷기', '달리기', '등산'];
@@ -63,6 +70,20 @@ class _WalkFinishedState extends State<WalkFinished> {
   String ipAddress = IpAddress.ipAddress;
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+  File? pickedImage;
+  void _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImageFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxHeight: 150,
+    );
+    setState(() {
+      if (pickedImageFile != null) {
+        pickedImage = File(pickedImageFile.path);
+      }
+    });
+  }
 
   void getCurrentUser() {
     try {
@@ -77,8 +98,15 @@ class _WalkFinishedState extends State<WalkFinished> {
   }
 
   saveRouteInfo() async {
+    final refImage = FirebaseStorage.instance
+        .ref()
+        .child('route_images')
+        .child('$lastRouteId.png');
+    await refImage.putFile(pickedImage!);
+    final routeImgUrl = await refImage.getDownloadURL();
     var url = 'http://$ipAddress/route/save';
     var body = {
+      "id": lastRouteId,
       "userEmail": userEmail,
       "minutes": minuteData,
       "personAge": selectedPersonAge,
@@ -88,6 +116,7 @@ class _WalkFinishedState extends State<WalkFinished> {
       "walkLevel": selectedWalkingLevel,
       "keyword1": selectedWalkingKeyword1,
       "keyword2": selectedWalkingKeyword2,
+      "routeImgUrl": routeImgUrl
     };
 
     var data = await http.post(Uri.parse(url),
@@ -106,7 +135,7 @@ class _WalkFinishedState extends State<WalkFinished> {
     return Container(
       padding: EdgeInsets.only(top: 10),
       width: 400,
-      height: 800,
+      height: 900,
       decoration: BoxDecoration(border: Border.all()),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,8 +147,19 @@ class _WalkFinishedState extends State<WalkFinished> {
               fontSize: 25,
             ),
           ),
-          SizedBox(
-            height: 10,
+          // SizedBox(
+          //   height: 10,
+          // ),
+          GestureDetector(
+            onTap: () {
+              _pickImage();
+            },
+            child: CircleAvatar(
+              radius: 70,
+              backgroundColor: Colors.blue,
+              backgroundImage:
+                  pickedImage != null ? FileImage(pickedImage!) : null,
+            ),
           ),
           Text(
             "- 산책 시간 -",
@@ -130,9 +170,9 @@ class _WalkFinishedState extends State<WalkFinished> {
             "$hours:$minutes:$seconds",
             style: TextStyle(color: Colors.black, fontSize: 20),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
           Text(
             "- 보호자 나이 -",
             style: TextStyle(
@@ -175,9 +215,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          // SizedBox(
+          //   height: 20,
+          // ),
           Text(
             "- 강아지 나이 -",
             style: TextStyle(
@@ -220,9 +260,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          // SizedBox(
+          //   height: 20,
+          // ),
           Text(
             "- 산책 유형 -",
             style: TextStyle(
@@ -265,9 +305,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          // SizedBox(
+          //   height: 20,
+          // ),
           Text(
             "- 산책 만족도 -",
             style: TextStyle(
@@ -310,9 +350,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
           Text(
             "- 산책 난이도 -",
             style: TextStyle(
@@ -355,9 +395,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
           Text(
             "- 산책 키워드 -",
             style: TextStyle(
@@ -400,9 +440,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 5,
-          ),
+          // SizedBox(
+          //   height: 5,
+          // ),
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
             height: MediaQuery.of(context).size.height * 0.05,
@@ -440,9 +480,9 @@ class _WalkFinishedState extends State<WalkFinished> {
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          // SizedBox(
+          //   height: 20,
+          // ),
           Text(
             '산책 경로를 공유하시겠어요?',
             style: TextStyle(
@@ -478,6 +518,9 @@ class _WalkFinishedState extends State<WalkFinished> {
     hours = widget.hours;
     minutes = widget.minutes;
     seconds = widget.seconds;
+    lastRouteId = widget.routeLastId;
+    lastRouteId += 1;
+    print('lastRouteId : $lastRouteId');
     minuteData = int.parse(hours) * 60 + int.parse(minutes);
     getCurrentUser();
     userEmail = loggedUser!.email!;

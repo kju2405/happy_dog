@@ -2,6 +2,7 @@ package happy_dog.happy_dog.repository;
 
 import happy_dog.happy_dog.domain.Dog;
 import happy_dog.happy_dog.domain.Route;
+import happy_dog.happy_dog.domain.RouteLastId;
 import happy_dog.happy_dog.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
@@ -95,7 +96,7 @@ public class UserRepository {
     }
 
     public void saveRoute(Route route) throws SQLException {
-        String sql="insert into routes (useremail, minutesWord, walkKind, walkLevel, keyword1, keyword2,minutes,personAge,dogAge,walkStatis) values (?,?,?,?,?,?,?,?,?,?);";
+        String sql="insert into routes (useremail, minutesWord, walkKind, walkLevel, keyword1, keyword2,minutes,personAge,dogAge,walkStatis,id,routeImgUrl) values (?,?,?,?,?,?,?,?,?,?,?,?);";
 
         Connection con=null;
         PreparedStatement pstmt=null;
@@ -138,6 +139,8 @@ public class UserRepository {
             pstmt.setString(8,route.getPersonAge());
             pstmt.setString(9, route.getDogAge());
             pstmt.setString(10, route.getWalkStatis());
+            pstmt.setInt(11, route.getId());
+            pstmt.setString(12, route.getRouteImgUrl());
             pstmt.executeUpdate();
         }catch (SQLException e){
             log.error("db error",e);
@@ -255,6 +258,33 @@ public class UserRepository {
                 return user;
             } else {
                 throw new NoSuchElementException("user not found email = " + email);
+            }
+        } catch (SQLException e) {
+            log.error("db error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public RouteLastId findLastRouteId() throws SQLException {
+        String sql = "select id from routes order by id desc limit 1;";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                RouteLastId id = new RouteLastId();
+                id.setLastId(rs.getInt("id"));
+
+                return id;
+            } else {
+                throw new NoSuchElementException("no Id");
             }
         } catch (SQLException e) {
             log.error("db error",e);

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 @Data @Getter @Setter
 public class Route {
+    private int id;
     private String userEmail;
     private int minutes;
     private String personAge;
@@ -16,6 +17,7 @@ public class Route {
     private String keyword1;
     private String keyword2;
     private String minutesWord;
+    private String routeImgUrl;
 
     public Route() {
     }
