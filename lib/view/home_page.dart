@@ -118,6 +118,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Marker> markers = [];
   int markerId = 1;
+  final Set<Polyline> _polyline = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,6 +229,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<LatLng> latLngList = [];
+
   Widget googleMapUI() {
     return Consumer<LocationProvider>(builder: (consumeContext, model, child) {
       if (model.locationPosition != null) {
@@ -248,11 +252,20 @@ class _HomePageState extends State<HomePage> {
                         BitmapDescriptor.hueRed),
                   );
                   markers.add(newMarker);
+                  latLngList.add(latLng);
                   markerId = markerId + 1;
                   setState(() {});
                   print('our lat and lng : $latLng');
+                  _polyline.add(
+                    Polyline(
+                      polylineId: PolylineId('$markerId'),
+                      points: latLngList,
+                      width: 6,
+                    ),
+                  );
                 },
                 markers: markers.map((e) => e).toSet(),
+                polylines: _polyline,
                 onMapCreated: (GoogleMapController controller) {},
               ),
             )
