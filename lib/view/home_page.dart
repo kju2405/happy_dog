@@ -116,6 +116,8 @@ class _HomePageState extends State<HomePage> {
     Provider.of<LocationProvider>(context, listen: false).initalization();
   }
 
+  List<Marker> markers = [];
+  int markerId = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -237,6 +239,20 @@ class _HomePageState extends State<HomePage> {
                     CameraPosition(target: model.locationPosition, zoom: 18),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
+                onTap: (LatLng latLng) {
+                  Marker newMarker = Marker(
+                    markerId: MarkerId('$markerId'),
+                    position: LatLng(latLng.latitude, latLng.longitude),
+                    infoWindow: InfoWindow(title: 'New place'),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueRed),
+                  );
+                  markers.add(newMarker);
+                  markerId = markerId + 1;
+                  setState(() {});
+                  print('our lat and lng : $latLng');
+                },
+                markers: markers.map((e) => e).toSet(),
                 onMapCreated: (GoogleMapController controller) {},
               ),
             )

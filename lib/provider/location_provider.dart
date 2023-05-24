@@ -47,7 +47,7 @@ class LocationProvider with ChangeNotifier {
         currentLoaction.longitude!,
       );
 
-      print(_locationPosition);
+      // print(_locationPosition);
       notifyListeners();
     });
   }
