@@ -74,10 +74,10 @@ class _WalkFinishedState extends State<WalkFinished> {
   void _pickImage() async {
     final imagePicker = ImagePicker();
     final pickedImageFile = await imagePicker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-      maxHeight: 150,
-    );
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxHeight: 500,
+        maxWidth: 500);
     setState(() {
       if (pickedImageFile != null) {
         pickedImage = File(pickedImageFile.path);
@@ -101,7 +101,7 @@ class _WalkFinishedState extends State<WalkFinished> {
     final refImage = FirebaseStorage.instance
         .ref()
         .child('route_images')
-        .child('$lastRouteId.png');
+        .child('$lastRouteId.jpg');
     await refImage.putFile(pickedImage!);
     final routeImgUrl = await refImage.getDownloadURL();
     var url = 'http://$ipAddress/route/save';

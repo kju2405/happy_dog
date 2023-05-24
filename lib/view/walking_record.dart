@@ -96,9 +96,10 @@ class _WalkingRecordState extends State<WalkingRecord> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'images/walking_route.png',
-                        ),
+                        // Image.asset(
+                        //   'images/walking_route.png',
+                        // ),
+                        Image.network(routeData[index]['routeImgUrl']),
                         SizedBox(
                           height: 10,
                         ),

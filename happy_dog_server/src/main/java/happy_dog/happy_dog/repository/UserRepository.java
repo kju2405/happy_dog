@@ -343,6 +343,7 @@ public class UserRepository {
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 Route route = new Route();
+                route.setId(rs.getInt("id"));
                 route.setUserEmail(rs.getString("useremail"));
                 route.setMinutes(rs.getInt("minutes"));
                 route.setWalkKind(rs.getString("walkKind"));
@@ -353,6 +354,7 @@ public class UserRepository {
                 route.setDogAge(rs.getString("dogAge"));
                 route.setWalkStatis(rs.getString("walkStatis"));
                 route.setMinutesWord(rs.getString("minutesWord"));
+                route.setRouteImgUrl(rs.getString("routeImgUrl"));
                 routeResult.add(route);
             }
         } catch (SQLException e) {
@@ -390,6 +392,7 @@ public class UserRepository {
                 route.setDogAge(rs.getString("dogAge"));
                 route.setWalkStatis(rs.getString("walkStatis"));
                 route.setMinutesWord(rs.getString("minutesWord"));
+                route.setRouteImgUrl(rs.getString("routeImgUrl"));
                 routeResult.add(route);
             }
         } catch (SQLException e) {

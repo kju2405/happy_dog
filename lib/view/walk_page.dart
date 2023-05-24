@@ -94,9 +94,10 @@ class _WalkingPageState extends State<WalkingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'images/walking_route.png',
-                        ),
+                        // Image.asset(
+                        //   'images/walking_route.png',
+                        // ),
+                        Image.network(routeData[index]['routeImgUrl']),
                         SizedBox(
                           height: 10,
                         ),
