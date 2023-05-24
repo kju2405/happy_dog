@@ -5,6 +5,9 @@ import 'package:happy_dog/popup_windows/walk_finish_popup.dart';
 import 'package:happy_dog/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'package:happy_dog/config/ipAddress.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   final String? userEmail;
@@ -72,6 +75,22 @@ class _HomePageState extends State<HomePage> {
   String digitSeconds = "00", digitMinutes = "00", digitHours = "00";
   Timer? timer;
   bool started = false;
+  String ipAddress = IpAddress.ipAddress;
+  int? id;
+
+  void getLastRouteId() async {
+    http.Response response =
+        await http.get(Uri.parse('http://$ipAddress/lastRouteId'));
+    if (response.statusCode == 200) {
+      String jsonData = response.body;
+      var parsingData = jsonDecode(jsonData);
+      id = parsingData['lastId'];
+
+      print('routeListId ---  $id');
+    } else {
+      print(response.statusCode);
+    }
+  }
 
   void showAlert(BuildContext context) {
     showDialog(
@@ -83,6 +102,7 @@ class _HomePageState extends State<HomePage> {
             hours: digitHours,
             minutes: digitMinutes,
             seconds: digitSeconds,
+            routeLastId: id,
           ),
         );
       },
@@ -106,6 +126,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: () {
+                getLastRouteId();
                 setState(() {});
               },
               icon: Icon(
