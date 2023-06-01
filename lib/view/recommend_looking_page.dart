@@ -72,9 +72,11 @@ class _LookingRecommendState extends State<LookingRecommend> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            'images/walking_route.png',
-                          ),
+                          // Image.asset(
+                          //   'images/walking_route.png',
+                          // ),
+                          Image.network(
+                              routeList[recommendList[index]]['routeImgUrl']),
                           SizedBox(
                             height: 10,
                           ),
