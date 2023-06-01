@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
   int seconds = 0, minutes = 0, hours = 0;
   String digitSeconds = "00", digitMinutes = "00", digitHours = "00";
   Timer? timer;
+  Timer? liveTracking;
   bool started = false;
   String ipAddress = IpAddress.ipAddress;
   int? id;
@@ -211,6 +212,7 @@ class _HomePageState extends State<HomePage> {
                                 print('산책 종료');
                                 int walkingTime = stop();
                                 showAlert(context);
+                                latLngList = [];
                                 print('walkingTime : $walkingTime');
                               } else {
                                 print('산책 시작');
@@ -243,26 +245,57 @@ class _HomePageState extends State<HomePage> {
                     CameraPosition(target: model.locationPosition, zoom: 18),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
-                onTap: (LatLng latLng) {
-                  Marker newMarker = Marker(
-                    markerId: MarkerId('$markerId'),
-                    position: LatLng(latLng.latitude, latLng.longitude),
-                    infoWindow: InfoWindow(title: 'New place'),
-                    icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueRed),
-                  );
-                  markers.add(newMarker);
-                  latLngList.add(latLng);
-                  markerId = markerId + 1;
-                  setState(() {});
-                  print('our lat and lng : $latLng');
-                  _polyline.add(
-                    Polyline(
-                      polylineId: PolylineId('$markerId'),
-                      points: latLngList,
-                      width: 6,
-                    ),
-                  );
+                // onTap: (LatLng latLng) {
+                //   Marker newMarker = Marker(
+                //     markerId: MarkerId('$markerId'),
+                //     position: LatLng(latLng.latitude, latLng.longitude),
+                //     infoWindow: InfoWindow(title: 'New place'),
+                //     icon: BitmapDescriptor.defaultMarkerWithHue(
+                //         BitmapDescriptor.hueRed),
+                //   );
+                //   markers.add(newMarker);
+                //   latLngList.add(latLng);
+                //   markerId = markerId + 1;
+                //   // print(model.locationPosition);
+                //   setState(() {});
+                //   print('our lat and lng : $latLng');
+                //   _polyline.add(
+                //     Polyline(
+                //       polylineId: PolylineId('$markerId'),
+                //       points: latLngList,
+                //       width: 6,
+                //     ),
+                //   );
+                // },
+                onTap: (LatLng latlng) {
+                  if (started) {
+                    liveTracking =
+                        Timer.periodic(Duration(seconds: 5), (timer) {
+                      print(started);
+                      latLngList.add(model.locationPosition);
+                      print(model.locationPosition);
+                      markerId = markerId + 1;
+                      setState(() {});
+                      _polyline.add(
+                        Polyline(
+                            polylineId: PolylineId('$markerId'),
+                            points: latLngList,
+                            width: 6),
+                      );
+                    });
+                    // latLngList.add(model.locationPosition);
+                    // print(model.locationPosition);
+                    // markerId = markerId + 1;
+                    // setState(() {});
+                    // _polyline.add(
+                    //   Polyline(
+                    //       polylineId: PolylineId('$markerId'),
+                    //       points: latLngList,
+                    //       width: 6),
+                    // );
+                  } else {
+                    liveTracking!.cancel();
+                  }
                 },
                 markers: markers.map((e) => e).toSet(),
                 polylines: _polyline,
